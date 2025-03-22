@@ -15,14 +15,23 @@ const Cell = ({ value, isInitial, onChange }) => {
   };
 
   return (
-    <input
-      type="text"
-      className={`sudoku-cell ${isInitial ? "initial" : ""}`}
-      value={value === 0 ? "" : value}
-      onChange={handleChange}
-      readOnly={isInitial}
-      maxLength={1}
-    />
+    <div className={`sudoku-cell ${isInitial ? "initial" : ""}`}>
+      <input
+        type="text"
+        className="sudoku-cell-content"
+        value={value === 0 ? "" : value}
+        onChange={handleChange}
+        readOnly={isInitial}
+        maxLength={1}
+        style={{
+          border: "none",
+          background: "transparent",
+          width: "100%",
+          height: "100%",
+          fontSize: "inherit",
+        }}
+      />
+    </div>
   );
 };
 

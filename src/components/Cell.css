@@ -1,10 +1,24 @@
 .sudoku-cell {
-    width: 40px;
-    height: 40px;
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%; /* Creates a perfect square */
+    position: relative;
     border: 1px solid #bbb;
-    font-size: 20px;
+    font-size: min(5vw, 20px);
     text-align: center;
     background-color: white;
+    box-sizing: border-box;
+}
+
+.sudoku-cell-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .sudoku-cell:focus {
@@ -17,4 +31,11 @@
     background-color: #f0f0f0;
     font-weight: bold;
     color: #333;
+}
+
+@media (max-width: 480px) {
+    .sudoku-cell {
+        border-width: 1px;
+        font-size: min(5vw, 18px);
+    }
 }

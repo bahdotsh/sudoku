@@ -10,6 +10,7 @@
     display: flex;
     justify-content: space-between;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .control-button {
@@ -20,7 +21,9 @@
     cursor: pointer;
     font-weight: bold;
     flex: 1;
+    min-width: 90px;
     transition: background-color 0.2s ease;
+    margin-bottom: 5px;
 }
 
 .solve {
@@ -53,6 +56,7 @@
 .generate-controls {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .difficulty-select {
@@ -61,14 +65,41 @@
     border: 1px solid #ccc;
     font-size: 16px;
     flex: 1;
+    min-width: 90px;
 }
 
 .generate {
     background-color: #2196f3;
     color: white;
     flex: 2;
+    min-width: 140px;
 }
 
 .generate:hover {
     background-color: #0b7dda;
+}
+
+@media (max-width: 480px) {
+    .controls {
+        gap: 10px;
+    }
+
+    .button-group {
+        gap: 5px;
+    }
+
+    .control-button {
+        padding: 8px 10px;
+        font-size: 14px;
+        min-width: 75px;
+    }
+
+    .generate-controls {
+        gap: 5px;
+    }
+
+    .difficulty-select {
+        padding: 8px;
+        font-size: 14px;
+    }
 }
