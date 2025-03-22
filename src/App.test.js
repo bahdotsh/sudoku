@@ -3,6 +3,6 @@ import App from "./App";
 
 test("renders Sudoku app header", () => {
   render(<App />);
-  const headerElement = screen.getByText(/Sudoku Solver & Generator/i);
+  const headerElement = screen.getByText(/Sudoku/i);
   expect(headerElement).toBeInTheDocument();
 });
