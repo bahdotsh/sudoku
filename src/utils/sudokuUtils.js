@@ -27,17 +27,17 @@ export function solveSudoku(board) {
   return false;
 }
 
-// Find the first empty cell (value 0)
-function findEmptyCell(board) {
-  for (let row = 0; row < 9; row++) {
-    for (let col = 0; col < 9; col++) {
-      if (board[row][col] === 0) {
-        return [row, col];
+// Find an empty cell (for hints)
+export const findEmptyCell = (board) => {
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (board[i][j] === 0) {
+        return [i, j];
       }
     }
   }
-  return null;
-}
+  return null; // No empty cell found
+};
 
 // Check if placing a number at given position is valid
 function isValidPlacement(board, row, col, num) {
@@ -212,16 +212,4 @@ export const isSudokuValid = (board) => {
   }
 
   return true;
-};
-
-// Find an empty cell (for hints)
-export const findEmptyCell = (board) => {
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      if (board[i][j] === 0) {
-        return [i, j];
-      }
-    }
-  }
-  return null; // No empty cell found
 };
