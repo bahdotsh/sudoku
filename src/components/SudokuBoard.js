@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Cell from "./Cell";
+import VirtualKeyboard from "./VirtualKeyboard";
 import "./SudokuBoard.css";
 
 const SudokuBoard = ({
@@ -12,6 +13,22 @@ const SudokuBoard = ({
 }) => {
   const [message, setMessage] = useState(null);
   const [messageType, setMessageType] = useState(null);
+  const [activeCell, setActiveCell] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
 
   useEffect(() => {
     if (isSolved) {
@@ -29,6 +46,20 @@ const SudokuBoard = ({
     }
   }, [isSolved, isComplete]);
 
+  const handleCellFocus = (row, col) => {
+    if (initialBoard[row][col] === 0) {
+      setActiveCell([row, col]);
+    }
+  };
+
+  const handleKeyPress = (key) => {
+    if (!activeCell) return;
+
+    const [row, col] = activeCell;
+    const value = key === "0" ? 0 : parseInt(key);
+    onCellChange(row, col, value);
+  };
+
   const renderCell = (row, col) => {
     const value = board[row][col];
     const isInitial = initialBoard[row][col] !== 0;
@@ -37,6 +68,8 @@ const SudokuBoard = ({
       !isInitial &&
       value !== 0 &&
       !isValidPlacement(board, row, col, value);
+    const isActive =
+      activeCell && activeCell[0] === row && activeCell[1] === col;
 
     return (
       <Cell
@@ -45,7 +78,9 @@ const SudokuBoard = ({
         isInitial={isInitial}
         hasError={hasError}
         isSuccess={isSolved}
+        isActive={isActive}
         onChange={(newValue) => onCellChange(row, col, newValue)}
+        onFocus={() => handleCellFocus(row, col)}
       />
     );
   };
@@ -110,13 +145,17 @@ const SudokuBoard = ({
   };
 
   return (
-    <div className="sudoku-board">
-      {renderBoard()}
-      <div
-        className={`board-message ${message ? "visible" : ""} ${messageType || ""}`}
-      >
-        {message}
+    <div className="sudoku-container">
+      <div className="sudoku-board">
+        {renderBoard()}
+        <div
+          className={`board-message ${message ? "visible" : ""} ${messageType || ""}`}
+        >
+          {message}
+        </div>
       </div>
+
+      {isMobile && <VirtualKeyboard onKeyPress={handleKeyPress} />}
     </div>
   );
 };

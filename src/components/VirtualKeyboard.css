@@ -1,0 +1,50 @@
+.virtual-keyboard {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    width: 100%;
+    max-width: 500px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.keyboard-key {
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.keyboard-key:hover,
+.keyboard-key:active {
+    background-color: #e6e6e6;
+}
+
+.key-clear {
+    grid-column: span 2;
+    background-color: #ff9800;
+    color: white;
+}
+
+.key-clear:hover,
+.key-clear:active {
+    background-color: #e68a00;
+}
+
+@media (max-width: 480px) {
+    .virtual-keyboard {
+        gap: 5px;
+        padding: 8px;
+    }
+
+    .keyboard-key {
+        padding: 8px;
+        font-size: 16px;
+    }
+}

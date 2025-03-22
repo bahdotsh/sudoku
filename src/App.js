@@ -156,7 +156,7 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Sudoku Solver & Generator</h1>
+        <h1>Sudoku</h1>
       </header>
       <main>
         <SudokuBoard
