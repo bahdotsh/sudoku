@@ -21,6 +21,8 @@ function App() {
   const [highlightError, setHighlightError] = useState(false);
   const [gameTime, setGameTime] = useState(0);
   const [timerActive, setTimerActive] = useState(false);
+  const [isSolved, setIsSolved] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
 
   // Start the timer
   useEffect(() => {
@@ -42,14 +44,37 @@ function App() {
     handleGenerate("easy");
   }, []);
 
+  // Check if board is complete and correct
+  useEffect(() => {
+    // Check if there are any empty cells
+    const hasEmptyCells = board.some((row) => row.some((cell) => cell === 0));
+    setIsComplete(!hasEmptyCells);
+
+    if (!hasEmptyCells) {
+      // If complete, check if valid
+      const valid = isSudokuValid(board);
+      setIsSolved(valid);
+
+      if (valid) {
+        // Puzzle solved successfully
+        setTimerActive(false);
+      }
+    } else {
+      setIsSolved(false);
+    }
+  }, [board]);
+
   // Solve the current puzzle
   const handleSolve = () => {
     const boardCopy = board.map((row) => [...row]);
     if (solveSudoku(boardCopy)) {
       setBoard(boardCopy);
       setTimerActive(false);
+      setIsSolved(true);
     } else {
-      alert("No solution exists for this puzzle!");
+      // Visual feedback for no solution
+      setHighlightError(true);
+      setTimeout(() => setHighlightError(false), 2000);
     }
   };
 
@@ -62,6 +87,8 @@ function App() {
     setHighlightError(false);
     setGameTime(0);
     setTimerActive(true);
+    setIsSolved(false);
+    setIsComplete(false);
   };
 
   // Reset to initial state of current puzzle
@@ -70,6 +97,8 @@ function App() {
     setHighlightError(false);
     setGameTime(0);
     setTimerActive(true);
+    setIsSolved(false);
+    setIsComplete(false);
   };
 
   // Clear the board completely
@@ -80,28 +109,19 @@ function App() {
     setHighlightError(false);
     setGameTime(0);
     setTimerActive(false);
+    setIsSolved(false);
+    setIsComplete(false);
   };
 
   // Check if the current solution is correct
   const handleCheck = () => {
     setHighlightError(true);
-
-    // Check if the board is fully filled
-    const hasEmptyCells = board.some((row) => row.some((cell) => cell === 0));
-
-    if (hasEmptyCells) {
-      alert("The puzzle is not complete yet. Fill in all cells first!");
-      return;
-    }
-
-    if (isSudokuValid(board)) {
-      alert("Congratulations! Your solution is correct!");
-      setTimerActive(false);
-    } else {
-      alert(
-        "Your solution contains errors. The incorrect cells are highlighted.",
-      );
-    }
+    setTimeout(() => {
+      if (!isComplete) {
+        // We keep the highlight errors visible for longer
+        setTimeout(() => setHighlightError(false), 3000);
+      }
+    }, 100);
   };
 
   // Provide a hint by filling in one correct cell
@@ -109,8 +129,7 @@ function App() {
     const emptyCell = findEmptyCell(board);
 
     if (!emptyCell) {
-      alert("No empty cells to provide hints for!");
-      return;
+      return; // No empty cells to provide hints for
     }
 
     const [row, col] = emptyCell;
@@ -145,6 +164,8 @@ function App() {
           initialBoard={initialBoard}
           onCellChange={handleCellChange}
           highlightError={highlightError}
+          isSolved={isSolved}
+          isComplete={isComplete}
         />
         <Controls
           onSolve={handleSolve}

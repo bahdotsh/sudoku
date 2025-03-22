@@ -1,7 +1,7 @@
 import React from "react";
 import "./Cell.css";
 
-const Cell = ({ value, isInitial, hasError, onChange }) => {
+const Cell = ({ value, isInitial, hasError, isSuccess, onChange }) => {
   const handleChange = (e) => {
     const newValue = e.target.value;
 
@@ -14,10 +14,13 @@ const Cell = ({ value, isInitial, hasError, onChange }) => {
     }
   };
 
+  const cellClass = `sudoku-cell
+    ${isInitial ? "initial" : ""}
+    ${hasError ? "error" : ""}
+    ${isSuccess ? "success" : ""}`;
+
   return (
-    <div
-      className={`sudoku-cell ${isInitial ? "initial" : ""} ${hasError ? "error" : ""}`}
-    >
+    <div className={cellClass}>
       <input
         type="text"
         className="sudoku-cell-content"
@@ -25,13 +28,6 @@ const Cell = ({ value, isInitial, hasError, onChange }) => {
         onChange={handleChange}
         readOnly={isInitial}
         maxLength={1}
-        style={{
-          border: "none",
-          background: "transparent",
-          width: "100%",
-          height: "100%",
-          fontSize: "inherit",
-        }}
       />
     </div>
   );

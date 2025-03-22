@@ -8,6 +8,7 @@
     text-align: center;
     background-color: white;
     box-sizing: border-box;
+    transition: background-color 0.3s ease;
 }
 
 .sudoku-cell-content {
@@ -19,6 +20,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
+}
+
+.sudoku-cell input {
+    text-align: center;
+    font-family: "Arial", sans-serif;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: inherit;
+    outline: none;
 }
 
 .sudoku-cell:focus {
@@ -36,11 +54,40 @@
 .sudoku-cell.error {
     background-color: #ffeeee;
     color: #cc0000;
+    animation: pulse-error 1.5s infinite;
+}
+
+.sudoku-cell.success {
+    animation: success-cell 1.5s forwards;
 }
 
 .sudoku-cell.hint {
     background-color: #fffde7;
     color: #ff9800;
+}
+
+@keyframes pulse-error {
+    0% {
+        background-color: #ffeeee;
+    }
+    50% {
+        background-color: #ffcccc;
+    }
+    100% {
+        background-color: #ffeeee;
+    }
+}
+
+@keyframes success-cell {
+    0% {
+        background-color: #ffffff;
+    }
+    50% {
+        background-color: #b3ffb3;
+    }
+    100% {
+        background-color: #e6ffe6;
+    }
 }
 
 @media (max-width: 480px) {

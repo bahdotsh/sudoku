@@ -1,8 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Cell from "./Cell";
 import "./SudokuBoard.css";
 
-const SudokuBoard = ({ board, initialBoard, onCellChange, highlightError }) => {
+const SudokuBoard = ({
+  board,
+  initialBoard,
+  onCellChange,
+  highlightError,
+  isSolved,
+  isComplete,
+}) => {
+  const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState(null);
+
+  useEffect(() => {
+    if (isSolved) {
+      setMessage("Puzzle Solved!");
+      setMessageType("success");
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+    } else if (isComplete && !isSolved) {
+      setMessage("There are some errors");
+      setMessageType("incomplete");
+      setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+    }
+  }, [isSolved, isComplete]);
+
   const renderCell = (row, col) => {
     const value = board[row][col];
     const isInitial = initialBoard[row][col] !== 0;
@@ -18,6 +44,7 @@ const SudokuBoard = ({ board, initialBoard, onCellChange, highlightError }) => {
         value={value}
         isInitial={isInitial}
         hasError={hasError}
+        isSuccess={isSolved}
         onChange={(newValue) => onCellChange(row, col, newValue)}
       />
     );
@@ -82,7 +109,16 @@ const SudokuBoard = ({ board, initialBoard, onCellChange, highlightError }) => {
     return boxes;
   };
 
-  return <div className="sudoku-board">{renderBoard()}</div>;
+  return (
+    <div className="sudoku-board">
+      {renderBoard()}
+      <div
+        className={`board-message ${message ? "visible" : ""} ${messageType || ""}`}
+      >
+        {message}
+      </div>
+    </div>
+  );
 };
 
 export default SudokuBoard;
