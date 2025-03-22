@@ -8,22 +8,29 @@
     background-color: #f0f0f0;
     border-radius: 8px;
     margin-top: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .keyboard-key {
-    padding: 10px;
+    padding: 10px 0;
     font-size: 18px;
     font-weight: bold;
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
 }
 
-.keyboard-key:hover,
-.keyboard-key:active {
+.keyboard-key:hover {
     background-color: #e6e6e6;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.keyboard-key:active {
+    background-color: #d9d9d9;
+    transform: translateY(0);
 }
 
 .key-clear {
@@ -32,19 +39,45 @@
     color: white;
 }
 
-.key-clear:hover,
-.key-clear:active {
+.key-clear:hover {
     background-color: #e68a00;
 }
 
+/* Desktop optimizations */
+@media (min-width: 769px) {
+    .virtual-keyboard {
+        margin-top: 20px;
+    }
+
+    .keyboard-key {
+        padding: 12px 0;
+        font-size: 20px;
+    }
+}
+
+/* Mobile optimizations */
 @media (max-width: 480px) {
     .virtual-keyboard {
         gap: 5px;
         padding: 8px;
+        margin-top: 12px;
     }
 
     .keyboard-key {
         padding: 8px;
         font-size: 16px;
     }
+}
+
+.virtual-keyboard-container {
+    width: 100%;
+    max-width: 500px;
+}
+
+.keyboard-hint {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-style: italic;
 }
