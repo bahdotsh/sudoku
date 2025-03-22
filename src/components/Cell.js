@@ -22,7 +22,9 @@ const Cell = ({ value, isInitial, hasError, isSuccess, onChange }) => {
   return (
     <div className={cellClass}>
       <input
-        type="text"
+        type="tel"
+        inputMode="numeric"
+        pattern="[1-9]*"
         className="sudoku-cell-content"
         value={value === 0 ? "" : value}
         onChange={handleChange}
