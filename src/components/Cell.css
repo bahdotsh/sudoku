@@ -28,9 +28,19 @@
 }
 
 .sudoku-cell.initial {
-    background-color: #f0f0f0;
+    background-color: #e8f0fe;
     font-weight: bold;
-    color: #333;
+    color: #1a365d;
+}
+
+.sudoku-cell.error {
+    background-color: #ffeeee;
+    color: #cc0000;
+}
+
+.sudoku-cell.hint {
+    background-color: #fffde7;
+    color: #ff9800;
 }
 
 @media (max-width: 480px) {

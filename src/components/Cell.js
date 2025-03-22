@@ -1,7 +1,7 @@
 import React from "react";
 import "./Cell.css";
 
-const Cell = ({ value, isInitial, onChange }) => {
+const Cell = ({ value, isInitial, hasError, onChange }) => {
   const handleChange = (e) => {
     const newValue = e.target.value;
 
@@ -15,7 +15,9 @@ const Cell = ({ value, isInitial, onChange }) => {
   };
 
   return (
-    <div className={`sudoku-cell ${isInitial ? "initial" : ""}`}>
+    <div
+      className={`sudoku-cell ${isInitial ? "initial" : ""} ${hasError ? "error" : ""}`}
+    >
       <input
         type="text"
         className="sudoku-cell-content"

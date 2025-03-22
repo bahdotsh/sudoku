@@ -26,6 +26,18 @@
     margin-bottom: 5px;
 }
 
+.timer-display {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
 .solve {
     background-color: #4caf50;
     color: white;
@@ -51,6 +63,24 @@
 
 .clear:hover {
     background-color: #da190b;
+}
+
+.check {
+    background-color: #673ab7;
+    color: white;
+}
+
+.check:hover {
+    background-color: #5e35b1;
+}
+
+.hint {
+    background-color: #009688;
+    color: white;
+}
+
+.hint:hover {
+    background-color: #00796b;
 }
 
 .generate-controls {
@@ -101,5 +131,10 @@
     .difficulty-select {
         padding: 8px;
         font-size: 14px;
+    }
+
+    .timer-display {
+        font-size: 16px;
+        padding: 8px;
     }
 }

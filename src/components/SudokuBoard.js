@@ -2,19 +2,57 @@ import React from "react";
 import Cell from "./Cell";
 import "./SudokuBoard.css";
 
-const SudokuBoard = ({ board, initialBoard, onCellChange }) => {
+const SudokuBoard = ({ board, initialBoard, onCellChange, highlightError }) => {
   const renderCell = (row, col) => {
     const value = board[row][col];
     const isInitial = initialBoard[row][col] !== 0;
+    const hasError =
+      highlightError &&
+      !isInitial &&
+      value !== 0 &&
+      !isValidPlacement(board, row, col, value);
 
     return (
       <Cell
         key={`cell-${row}-${col}`}
         value={value}
         isInitial={isInitial}
+        hasError={hasError}
         onChange={(newValue) => onCellChange(row, col, newValue)}
       />
     );
+  };
+
+  // Function to check if a placement is valid
+  const isValidPlacement = (board, row, col, num) => {
+    // Check row
+    for (let i = 0; i < 9; i++) {
+      if (i !== col && board[row][i] === num) {
+        return false;
+      }
+    }
+
+    // Check column
+    for (let i = 0; i < 9; i++) {
+      if (i !== row && board[i][col] === num) {
+        return false;
+      }
+    }
+
+    // Check 3x3 box
+    const boxRow = Math.floor(row / 3) * 3;
+    const boxCol = Math.floor(col / 3) * 3;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        const r = boxRow + i;
+        const c = boxCol + j;
+        if ((r !== row || c !== col) && board[r][c] === num) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   };
 
   const renderBox = (boxRow, boxCol) => {
