@@ -10,6 +10,8 @@ const SudokuBoard = ({
   highlightError,
   isSolved,
   isComplete,
+  onReset,
+  onSolve,
 }) => {
   const [message, setMessage] = useState(null);
   const [messageType, setMessageType] = useState(null);
@@ -222,7 +224,17 @@ const SudokuBoard = ({
         </div>
       </div>
 
-      {/* Always show the virtual keyboard */}
+      {/* Bottom action buttons */}
+      <div className="board-actions">
+        <button className="board-button reset-button" onClick={onReset}>
+          Reset
+        </button>
+        <button className="board-button solve-button" onClick={onSolve}>
+          Solve
+        </button>
+      </div>
+
+      {/* Virtual keyboard */}
       <VirtualKeyboard onKeyPress={handleKeyPress} />
     </div>
   );

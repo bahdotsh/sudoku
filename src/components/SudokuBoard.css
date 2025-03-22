@@ -61,6 +61,60 @@
     color: white;
 }
 
+/* Action buttons below the board */
+.board-actions {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.board-button {
+    padding: 12px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1;
+    margin: 0 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.board-button:first-child {
+    margin-left: 0;
+}
+
+.board-button:last-child {
+    margin-right: 0;
+}
+
+.solve-button {
+    background-color: #4caf50;
+    color: white;
+}
+
+.solve-button:hover {
+    background-color: #3e8e41;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.reset-button {
+    background-color: #ff9800;
+    color: white;
+}
+
+.reset-button:hover {
+    background-color: #e68a00;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
 @media (max-width: 480px) {
     .sudoku-board {
         gap: 2px;
@@ -69,5 +123,78 @@
 
     .board-message {
         font-size: 18px;
+    }
+
+    .board-actions {
+        margin-top: 12px;
+    }
+
+    .board-button {
+        padding: 10px 0;
+        font-size: 14px;
+    }
+}
+
+.sudoku-container {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 120px);
+}
+
+.board-actions {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.board-button {
+    padding: 8px 0;
+}
+
+@media (max-width: 480px) {
+    .board-actions {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    .board-button {
+        padding: 6px 0;
+        font-size: 12px;
+    }
+}
+
+.sudoku-container {
+    width: 100%;
+    max-width: min(95vw, 500px);
+    margin: 0 auto;
+}
+
+.sudoku-board {
+    aspect-ratio: 1; /* Ensures board remains square */
+    width: 100%;
+}
+
+.board-actions {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.board-button {
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+@media (max-width: 480px) {
+    .board-actions {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .board-button {
+        padding: 6px 0;
+        font-size: 12px;
+    }
+
+    .board-message {
+        font-size: 16px;
     }
 }

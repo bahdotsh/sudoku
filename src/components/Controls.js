@@ -1,16 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Controls.css";
 
-const Controls = ({
-  onSolve,
-  onGenerate,
-  onReset,
-  onClear,
-  onCheck,
-  onHint,
-  gameTime,
-}) => {
+const Controls = ({ onGenerate, onHint, gameTime }) => {
   const [difficulty, setDifficulty] = useState("easy");
+  const initialRender = useRef(true);
+
+  // Only generate a new puzzle when difficulty changes, not on every render
+  useEffect(() => {
+    // Skip the effect on the very first render since App.js already generates a puzzle
+    if (initialRender.current) {
+      initialRender.current = false;
+      return;
+    }
+
+    // Generate new puzzle when difficulty changes
+    onGenerate(difficulty);
+  }, [difficulty]); // Don't include onGenerate in dependencies to avoid infinite loop
 
   const handleDifficultyChange = (e) => {
     setDifficulty(e.target.value);
@@ -24,31 +29,8 @@ const Controls = ({
   };
 
   return (
-    <div className="controls">
-      <div className="timer-display">Time: {formatTime(gameTime)}</div>
-
-      <div className="button-group">
-        <button className="control-button check" onClick={onCheck}>
-          Check Solution
-        </button>
-        <button className="control-button hint" onClick={onHint}>
-          Get Hint
-        </button>
-      </div>
-
-      <div className="button-group">
-        <button className="control-button solve" onClick={onSolve}>
-          Solve Puzzle
-        </button>
-        <button className="control-button reset" onClick={onReset}>
-          Reset
-        </button>
-        <button className="control-button clear" onClick={onClear}>
-          Clear Board
-        </button>
-      </div>
-
-      <div className="generate-controls">
+    <div className="controls-container">
+      <div className="top-controls">
         <select
           value={difficulty}
           onChange={handleDifficultyChange}
@@ -59,12 +41,12 @@ const Controls = ({
           <option value="hard">Hard</option>
           <option value="expert">Expert</option>
         </select>
-        <button
-          className="control-button generate"
-          onClick={() => onGenerate(difficulty)}
-        >
-          Generate New Puzzle
-        </button>
+
+        <div className="timer-display">{formatTime(gameTime)}</div>
+      </div>
+
+      <div className="hint-button" onClick={onHint}>
+        <i className="hint-icon">💡</i>
       </div>
     </div>
   );

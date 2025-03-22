@@ -62,6 +62,10 @@ function App() {
     } else {
       setIsSolved(false);
     }
+
+    // Always check for errors when the board changes
+    setHighlightError(true);
+    setTimeout(() => setHighlightError(false), 1000);
   }, [board]);
 
   // Solve the current puzzle
@@ -101,29 +105,6 @@ function App() {
     setIsComplete(false);
   };
 
-  // Clear the board completely
-  const handleClear = () => {
-    setBoard(emptyBoard.map((row) => [...row]));
-    setInitialBoard(emptyBoard.map((row) => [...row]));
-    setSolution(emptyBoard);
-    setHighlightError(false);
-    setGameTime(0);
-    setTimerActive(false);
-    setIsSolved(false);
-    setIsComplete(false);
-  };
-
-  // Check if the current solution is correct
-  const handleCheck = () => {
-    setHighlightError(true);
-    setTimeout(() => {
-      if (!isComplete) {
-        // We keep the highlight errors visible for longer
-        setTimeout(() => setHighlightError(false), 3000);
-      }
-    }, 100);
-  };
-
   // Provide a hint by filling in one correct cell
   const handleHint = () => {
     const emptyCell = findEmptyCell(board);
@@ -159,23 +140,23 @@ function App() {
         <h1>Sudoku</h1>
       </header>
       <main>
-        <SudokuBoard
-          board={board}
-          initialBoard={initialBoard}
-          onCellChange={handleCellChange}
-          highlightError={highlightError}
-          isSolved={isSolved}
-          isComplete={isComplete}
-        />
-        <Controls
-          onSolve={handleSolve}
-          onGenerate={handleGenerate}
-          onReset={handleReset}
-          onClear={handleClear}
-          onCheck={handleCheck}
-          onHint={handleHint}
-          gameTime={gameTime}
-        />
+        <div className="game-container">
+          <Controls
+            onGenerate={handleGenerate}
+            onHint={handleHint}
+            gameTime={gameTime}
+          />
+          <SudokuBoard
+            board={board}
+            initialBoard={initialBoard}
+            onCellChange={handleCellChange}
+            highlightError={highlightError}
+            isSolved={isSolved}
+            isComplete={isComplete}
+            onReset={handleReset}
+            onSolve={handleSolve}
+          />
+        </div>
       </main>
     </div>
   );
