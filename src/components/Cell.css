@@ -1,0 +1,20 @@
+.sudoku-cell {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #bbb;
+    font-size: 20px;
+    text-align: center;
+    background-color: white;
+}
+
+.sudoku-cell:focus {
+    outline: none;
+    background-color: #f0f0ff;
+    border-color: #6699cc;
+}
+
+.sudoku-cell.initial {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #333;
+}

@@ -1,0 +1,74 @@
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.control-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    flex: 1;
+    transition: background-color 0.2s ease;
+}
+
+.solve {
+    background-color: #4caf50;
+    color: white;
+}
+
+.solve:hover {
+    background-color: #3e8e41;
+}
+
+.reset {
+    background-color: #ff9800;
+    color: white;
+}
+
+.reset:hover {
+    background-color: #e68a00;
+}
+
+.clear {
+    background-color: #f44336;
+    color: white;
+}
+
+.clear:hover {
+    background-color: #da190b;
+}
+
+.generate-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.difficulty-select {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    flex: 1;
+}
+
+.generate {
+    background-color: #2196f3;
+    color: white;
+    flex: 2;
+}
+
+.generate:hover {
+    background-color: #0b7dda;
+}
