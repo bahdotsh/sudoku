@@ -12,6 +12,7 @@ const SudokuBoard = ({
   isComplete,
   onReset,
   onSolve,
+  incorrectCells,
 }) => {
   const [message, setMessage] = useState(null);
   const [messageType, setMessageType] = useState(null);
@@ -133,8 +134,13 @@ const SudokuBoard = ({
     const value = board[row][col];
     const isInitial = initialBoard[row][col] !== 0;
 
-    // Only highlight errors when the entire board is complete
-    const hasError = isComplete && !isSolved && value !== 0 && !isInitial;
+    // Check if this cell is in the incorrectCells array
+    const isIncorrect =
+      incorrectCells && incorrectCells.some(([r, c]) => r === row && c === col);
+
+    // Only highlight errors when the entire board is complete or cell is marked incorrect
+    const hasError =
+      (isComplete && !isSolved && value !== 0 && !isInitial) || isIncorrect;
 
     const isActive =
       activeCell && activeCell[0] === row && activeCell[1] === col;

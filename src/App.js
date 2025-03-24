@@ -23,6 +23,8 @@ function App() {
   const [timerActive, setTimerActive] = useState(false);
   const [isSolved, setIsSolved] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [incorrectCells, setIncorrectCells] = useState([]);
+  const [message, setMessage] = useState(null);
 
   // Start the timer
   useEffect(() => {
@@ -70,18 +72,62 @@ function App() {
 
   // Solve the current puzzle
   const handleSolve = () => {
+    // Create a copy of the current board
     const boardCopy = board.map((row) => [...row]);
-    if (solveSudoku(boardCopy)) {
-      setBoard(boardCopy);
-      setTimerActive(false);
-      setIsSolved(true);
-    } else {
-      // Visual feedback for no solution
+
+    // Check if there are incorrect values before solving
+    const foundIncorrectCells = findIncorrectCells(board, solution);
+
+    if (foundIncorrectCells.length > 0) {
+      // Highlight incorrect cells
+      setIncorrectCells(foundIncorrectCells);
+
+      // Show error message
+      setMessage("Incorrect numbers detected!");
+
+      // Set timeouts to clear the highlights after a delay
+      setTimeout(() => {
+        setMessage(null);
+        setIncorrectCells([]);
+      }, 3000);
+
+      // Visual feedback for errors
       setHighlightError(true);
       setTimeout(() => setHighlightError(false), 2000);
+    } else {
+      // Clear any previous incorrect cells
+      setIncorrectCells([]);
+
+      // No incorrect entries, proceed with solving
+      if (solveSudoku(boardCopy)) {
+        setBoard(boardCopy);
+        setTimerActive(false);
+        setIsSolved(true);
+      } else {
+        // Visual feedback for no solution
+        setHighlightError(true);
+        setTimeout(() => setHighlightError(false), 2000);
+      }
     }
   };
 
+  const findIncorrectCells = (currentBoard, correctSolution) => {
+    const incorrectCells = [];
+
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 9; col++) {
+        // Only check cells that user has filled (not empty and not initial)
+        if (currentBoard[row][col] !== 0 && initialBoard[row][col] === 0) {
+          // If user's entry doesn't match the solution
+          if (currentBoard[row][col] !== solution[row][col]) {
+            incorrectCells.push([row, col]);
+          }
+        }
+      }
+    }
+
+    return incorrectCells;
+  };
   // Generate a new puzzle with selected difficulty
   const handleGenerate = (difficulty) => {
     const { puzzle, solution: solvedPuzzle } = generatePuzzle(difficulty);
@@ -93,6 +139,8 @@ function App() {
     setTimerActive(true);
     setIsSolved(false);
     setIsComplete(false);
+    setIncorrectCells([]); // Clear incorrect cells
+    setMessage(null); // Clear any message
   };
 
   // Reset to initial state of current puzzle
@@ -103,6 +151,8 @@ function App() {
     setTimerActive(true);
     setIsSolved(false);
     setIsComplete(false);
+    setIncorrectCells([]); // Clear incorrect cells
+    setMessage(null); // Clear any message
   };
 
   // Provide a hint by filling in one correct cell
@@ -155,6 +205,8 @@ function App() {
             isComplete={isComplete}
             onReset={handleReset}
             onSolve={handleSolve}
+            incorrectCells={incorrectCells}
+            message={message}
           />
         </div>
       </main>
