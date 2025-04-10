@@ -25,6 +25,11 @@ function App() {
   const [isComplete, setIsComplete] = useState(false);
   const [incorrectCells, setIncorrectCells] = useState([]);
   const [message, setMessage] = useState(null);
+  const [boardCandidates, setBoardCandidates] = useState(
+    Array(9)
+      .fill()
+      .map(() => Array(9).fill([])),
+  );
 
   // Start the timer
   useEffect(() => {
@@ -139,8 +144,14 @@ function App() {
     setTimerActive(true);
     setIsSolved(false);
     setIsComplete(false);
-    setIncorrectCells([]); // Clear incorrect cells
-    setMessage(null); // Clear any message
+    setIncorrectCells([]);
+    setMessage(null);
+    // Clear all candidates
+    setBoardCandidates(
+      Array(9)
+        .fill()
+        .map(() => Array(9).fill([])),
+    );
   };
 
   // Reset to initial state of current puzzle
@@ -151,8 +162,14 @@ function App() {
     setTimerActive(true);
     setIsSolved(false);
     setIsComplete(false);
-    setIncorrectCells([]); // Clear incorrect cells
-    setMessage(null); // Clear any message
+    setIncorrectCells([]);
+    setMessage(null);
+    // Clear all candidates
+    setBoardCandidates(
+      Array(9)
+        .fill()
+        .map(() => Array(9).fill([])),
+    );
   };
 
   // Provide a hint by filling in one correct cell
@@ -177,6 +194,13 @@ function App() {
     const newBoard = [...board];
     newBoard[row][col] = value;
     setBoard(newBoard);
+
+    // Clear any candidates for this cell if we're setting a value
+    if (value !== 0) {
+      const newCandidates = [...boardCandidates];
+      newCandidates[row][col] = [];
+      setBoardCandidates(newCandidates);
+    }
 
     // Start timer if it's not active yet
     if (!timerActive) {
@@ -207,6 +231,8 @@ function App() {
             onSolve={handleSolve}
             incorrectCells={incorrectCells}
             message={message}
+            boardCandidates={boardCandidates}
+            setBoardCandidates={setBoardCandidates}
           />
         </div>
       </main>

@@ -1,11 +1,16 @@
 import React from "react";
 import "./VirtualKeyboard.css";
 
-const VirtualKeyboard = ({ onKeyPress }) => {
-  // Arrange numbers in a 3x3 grid (1-9) with clear button at the bottom
+const VirtualKeyboard = ({
+  onKeyPress,
+  candidateMode,
+  toggleCandidateMode,
+}) => {
   return (
     <div className="virtual-keyboard-container">
-      <div className="virtual-keyboard">
+      <div
+        className={`virtual-keyboard ${candidateMode ? "candidate-mode" : ""}`}
+      >
         {/* First row: 1-2-3 */}
         <button className="keyboard-key" onClick={() => onKeyPress("1")}>
           1
@@ -39,12 +44,18 @@ const VirtualKeyboard = ({ onKeyPress }) => {
           9
         </button>
 
-        {/* Fourth row: Clear button spanning all 3 columns */}
+        {/* Fourth row: Clear and Candidate mode buttons */}
         <button
           className="keyboard-key key-clear"
           onClick={() => onKeyPress("0")}
         >
           Clear
+        </button>
+        <button
+          className={`keyboard-key key-mode ${candidateMode ? "active" : ""}`}
+          onClick={toggleCandidateMode}
+        >
+          {candidateMode ? "Normal" : "Notes"}
         </button>
       </div>
     </div>

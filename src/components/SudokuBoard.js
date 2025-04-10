@@ -13,10 +13,24 @@ const SudokuBoard = ({
   onReset,
   onSolve,
   incorrectCells,
+  message,
+  boardCandidates,
+  setBoardCandidates,
 }) => {
-  const [message, setMessage] = useState(null);
+  const [localMessage, setLocalMessage] = useState(null);
   const [messageType, setMessageType] = useState(null);
   const [activeCell, setActiveCell] = useState(null);
+  const [candidateMode, setCandidateMode] = useState(false);
+  const [internalBoardCandidates, setInternalBoardCandidates] = useState(
+    boardCandidates ||
+      Array(9)
+        .fill()
+        .map(() => Array(9).fill([])),
+  );
+
+  // Use boardCandidates from props if provided, otherwise use internal state
+  const candidates = boardCandidates || internalBoardCandidates;
+  const updateCandidates = setBoardCandidates || setInternalBoardCandidates;
 
   // Add keyboard event listener for physical keyboard input
   useEffect(() => {
@@ -35,6 +49,11 @@ const SudokuBoard = ({
       else if (e.key.startsWith("Arrow")) {
         navigateWithArrowKeys(e.key);
       }
+      // Toggle candidate mode with Tab or 'n' key
+      else if (e.key === "Tab" || e.key.toLowerCase() === "n") {
+        e.preventDefault();
+        toggleCandidateMode();
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -42,7 +61,7 @@ const SudokuBoard = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [activeCell]); // Re-add event listener when active cell changes
+  }, [activeCell, candidateMode]); // Re-add event listener when active cell or mode changes
 
   // Add arrow key navigation
   const navigateWithArrowKeys = (key) => {
@@ -102,16 +121,16 @@ const SudokuBoard = ({
 
   useEffect(() => {
     if (isSolved) {
-      setMessage("Puzzle Solved!");
+      setLocalMessage("Puzzle Solved!");
       setMessageType("success");
       setTimeout(() => {
-        setMessage(null);
+        setLocalMessage(null);
       }, 3000);
     } else if (isComplete && !isSolved) {
-      setMessage("There are some errors");
+      setLocalMessage("There are some errors");
       setMessageType("incomplete");
       setTimeout(() => {
-        setMessage(null);
+        setLocalMessage(null);
       }, 3000);
     }
   }, [isSolved, isComplete]);
@@ -122,12 +141,57 @@ const SudokuBoard = ({
     }
   };
 
+  const toggleCandidateMode = () => {
+    setCandidateMode(!candidateMode);
+  };
+
   const handleKeyPress = (key) => {
     if (!activeCell) return;
 
     const [row, col] = activeCell;
-    const value = key === "0" ? 0 : parseInt(key);
-    onCellChange(row, col, value);
+
+    // If in normal mode
+    if (!candidateMode) {
+      const value = key === "0" ? 0 : parseInt(key);
+      onCellChange(row, col, value);
+
+      // Clear candidates when setting a value
+      if (value !== 0) {
+        const newCandidates = [...candidates];
+        newCandidates[row][col] = [];
+        updateCandidates(newCandidates);
+      }
+      return;
+    }
+
+    // In candidate mode
+    if (board[row][col] !== 0) return; // Don't add candidates to filled cells
+
+    if (key === "0") {
+      // Clear all candidates for this cell
+      const newCandidates = candidates.map((row) => [...row]);
+      newCandidates[row][col] = [];
+      updateCandidates(newCandidates);
+      return;
+    }
+
+    const numKey = parseInt(key);
+    const newCandidates = candidates.map((row) => [...row]);
+
+    // Toggle the candidate
+    if (newCandidates[row][col].includes(numKey)) {
+      // Remove the candidate
+      newCandidates[row][col] = newCandidates[row][col].filter(
+        (n) => n !== numKey,
+      );
+    } else {
+      // Add the candidate (limit to 4 candidates max)
+      if (newCandidates[row][col].length < 4) {
+        newCandidates[row][col] = [...newCandidates[row][col], numKey].sort();
+      }
+    }
+
+    updateCandidates(newCandidates);
   };
 
   const renderCell = (row, col) => {
@@ -149,6 +213,7 @@ const SudokuBoard = ({
       <Cell
         key={`cell-${row}-${col}`}
         value={value}
+        candidates={candidates[row][col]}
         isInitial={isInitial}
         hasError={hasError}
         isSuccess={isSolved}
@@ -186,15 +251,25 @@ const SudokuBoard = ({
     return boxes;
   };
 
+  // Use message from props or localMessage
+  const displayMessage = message || localMessage;
+
   return (
     <div className="sudoku-container">
       <div className="sudoku-board">
         {renderBoard()}
         <div
-          className={`board-message ${message ? "visible" : ""} ${messageType || ""}`}
+          className={`board-message ${displayMessage ? "visible" : ""} ${messageType || ""}`}
         >
-          {message}
+          {displayMessage}
         </div>
+      </div>
+
+      {/* Input mode indicator */}
+      <div className="input-mode-indicator">
+        {candidateMode
+          ? "Notes Mode: Add possible values"
+          : "Normal Mode: Enter numbers"}
       </div>
 
       {/* Bottom action buttons */}
@@ -208,7 +283,11 @@ const SudokuBoard = ({
       </div>
 
       {/* Virtual keyboard */}
-      <VirtualKeyboard onKeyPress={handleKeyPress} />
+      <VirtualKeyboard
+        onKeyPress={handleKeyPress}
+        candidateMode={candidateMode}
+        toggleCandidateMode={toggleCandidateMode}
+      />
     </div>
   );
 };

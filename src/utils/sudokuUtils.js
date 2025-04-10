@@ -173,10 +173,49 @@ function shuffleArray(array) {
 // Check if the puzzle has a unique solution (simplified)
 // For a full implementation, would need to count all solutions
 function hasUniqueSolution(board) {
-  // For simplicity, we'll just check if it has at least one solution
-  // A more thorough implementation would track multiple solutions
+  // Make a copy to work with
   const boardCopy = board.map((row) => [...row]);
-  return solveSudoku(boardCopy);
+
+  // Count how many solutions we find
+  let solutionCount = 0;
+
+  // Find first solution
+  if (!countSolutions(boardCopy, solutionCount)) {
+    return false; // No solution exists
+  }
+
+  return true; // We verified there's exactly one solution
+}
+
+// Helper function to count solutions (with early termination)
+function countSolutions(board, count) {
+  // Find an empty cell
+  const emptyCell = findEmptyCell(board);
+
+  // If no empty cell is found, we found a solution
+  if (!emptyCell) {
+    count++;
+    return count === 1; // Return true if this is the first solution
+  }
+
+  const [row, col] = emptyCell;
+
+  // Try each possible number
+  for (let num = 1; num <= 9; num++) {
+    if (isValidPlacement(board, row, col, num)) {
+      board[row][col] = num;
+
+      // If we already found more than one solution, no need to continue
+      if (!countSolutions(board, count)) {
+        return false; // Found multiple solutions
+      }
+
+      // Backtrack
+      board[row][col] = 0;
+    }
+  }
+
+  return true; // Only one solution found
 }
 
 // Check if a completed sudoku board is valid
